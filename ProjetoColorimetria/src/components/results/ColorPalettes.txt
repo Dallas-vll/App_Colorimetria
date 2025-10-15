@@ -1,0 +1,71 @@
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+export default function ColorPalettes({ analysis }) {
+  const ColorSwatch = ({ color, index }) => (
+    <div className="group cursor-pointer">
+      <div
+        className="w-full aspect-square rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-200"
+        style={{ backgroundColor: color }}
+      />
+      <p className="text-xs text-center mt-2 text-gray-600 font-mono">{color}</p>
+    </div>
+  );
+
+  return (
+    <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-2 border-white mb-8">
+      <CardHeader>
+        <CardTitle>Suas Paletas de Cores Personalizadas</CardTitle>
+        <p className="text-sm text-gray-600">
+          Cores que harmonizam perfeitamente com seu tom de pele
+        </p>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="primary" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="primary">Cores Primárias</TabsTrigger>
+            <TabsTrigger value="neutral">Cores Neutras</TabsTrigger>
+            <TabsTrigger value="accent">Cores de Acento</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="primary" className="mt-6">
+            <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+              {analysis.primary_colors?.map((color, idx) => (
+                <ColorSwatch key={idx} color={color} index={idx} />
+              ))}
+            </div>
+            <p className="text-sm text-gray-600 mt-4">
+              <strong>Cores primárias</strong> são as cores principais que mais favorecem você. 
+              Use-as em peças centrais do look, como blusas, vestidos e acessórios destacados.
+            </p>
+          </TabsContent>
+
+          <TabsContent value="neutral" className="mt-6">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+              {analysis.neutral_colors?.map((color, idx) => (
+                <ColorSwatch key={idx} color={color} index={idx} />
+              ))}
+            </div>
+            <p className="text-sm text-gray-600 mt-4">
+              <strong>Cores neutras</strong> são perfeitas para compor looks e criar harmonia. 
+              Ideais para calças, saias, casacos e peças básicas do guarda-roupa.
+            </p>
+          </TabsContent>
+
+          <TabsContent value="accent" className="mt-6">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+              {analysis.accent_colors?.map((color, idx) => (
+                <ColorSwatch key={idx} color={color} index={idx} />
+              ))}
+            </div>
+            <p className="text-sm text-gray-600 mt-4">
+              <strong>Cores de acento</strong> são para adicionar interesse e personalidade ao look. 
+              Use em detalhes, acessórios, maquiagem e pequenos toques de cor.
+            </p>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
+  );
+}

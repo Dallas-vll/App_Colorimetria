@@ -1,0 +1,121 @@
+import React, { useState, useEffect } from "react";
+import { UserAnalysis } from "@/entities/UserAnalysis";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Plus, Calendar, Palette } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+const seasonNames = {
+  primavera_clara: "Primavera Clara",
+  primavera_quente: "Primavera Quente",
+  primavera_brilhante: "Primavera Brilhante",
+  verao_claro: "Verão Claro",
+  verao_suave: "Verão Suave",
+  verao_frio: "Verão Frio",
+  outono_suave: "Outono Suave",
+  outono_quente: "Outono Quente",
+  outono_profundo: "Outono Profundo",
+  inverno_brilhante: "Inverno Brilhante",
+  inverno_frio: "Inverno Frio",
+  inverno_profundo: "Inverno Profundo"
+};
+
+export default function MyAnalyses() {
+  const [analyses, setAnalyses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadAnalyses();
+  }, []);
+
+  const loadAnalyses = async () => {
+    const data = await UserAnalysis.list("-created_date");
+    setAnalyses(data);
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen p-6 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Minhas Análises</h1>
+            <p className="text-gray-600 mt-1">Histórico de análises de colorimetria</p>
+          </div>
+          <Link to={createPageUrl("Analysis")}>
+            <Button className="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700">
+              <Plus className="w-4 h-4 mr-2" />
+              Nova Análise
+            </Button>
+          </Link>
+        </div>
+
+        {isLoading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-6">
+                  <div className="h-32 bg-gray-200 rounded-lg mb-4" />
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : analyses.length === 0 ? (
+          <Card className="p-12 text-center bg-white/80 backdrop-blur-sm">
+            <Palette className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Nenhuma análise ainda</h3>
+            <p className="text-gray-600 mb-6">Faça sua primeira análise de colorimetria</p>
+            <Link to={createPageUrl("Analysis")}>
+              <Button className="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700">
+                Começar Agora
+              </Button>
+            </Link>
+          </Card>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {analyses.map((analysis) => (
+              <Link key={analysis.id} to={createPageUrl(`Results?id=${analysis.id}`)}>
+                <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer bg-white/90 backdrop-blur-sm border-2 border-white group">
+                  <CardContent className="p-6">
+                    <div className="relative mb-4 rounded-lg overflow-hidden h-32">
+                      <img
+                        src={analysis.photo_url}
+                        alt="Análise"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    </div>
+                    
+                    <h3 className="font-bold text-lg text-gray-900 mb-2">
+                      {seasonNames[analysis.season]}
+                    </h3>
+                    
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                      <Calendar className="w-4 h-4" />
+                      {format(new Date(analysis.created_date), "d 'de' MMMM, yyyy", { locale: ptBR })}
+                    </div>
+
+                    <div className="flex gap-2">
+                      {analysis.primary_colors?.slice(0, 5).map((color, idx) => (
+                        <div
+                          key={idx}
+                          className="w-8 h-8 rounded-full shadow-md"
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

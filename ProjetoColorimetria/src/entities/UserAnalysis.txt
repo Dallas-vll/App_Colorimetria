@@ -1,0 +1,97 @@
+{
+  "name": "UserAnalysis",
+  "type": "object",
+  "properties": {
+    "photo_url": {
+      "type": "string",
+      "description": "URL da foto analisada"
+    },
+    "skin_undertone": {
+      "type": "string",
+      "enum": [
+        "quente",
+        "frio",
+        "neutro"
+      ],
+      "description": "Subtom da pele"
+    },
+    "skin_depth": {
+      "type": "string",
+      "enum": [
+        "claro",
+        "medio",
+        "escuro"
+      ],
+      "description": "Profundidade da pele"
+    },
+    "skin_intensity": {
+      "type": "string",
+      "enum": [
+        "suave",
+        "medio",
+        "brilhante"
+      ],
+      "description": "Intensidade da pele"
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "primavera_clara",
+        "primavera_quente",
+        "primavera_brilhante",
+        "verao_claro",
+        "verao_suave",
+        "verao_frio",
+        "outono_suave",
+        "outono_quente",
+        "outono_profundo",
+        "inverno_brilhante",
+        "inverno_frio",
+        "inverno_profundo"
+      ],
+      "description": "Estação de colorimetria identificada"
+    },
+    "temperature_score": {
+      "type": "number",
+      "description": "Score de temperatura (-1 frio a 1 quente)"
+    },
+    "depth_score": {
+      "type": "number",
+      "description": "Score de profundidade (-1 claro a 1 escuro)"
+    },
+    "intensity_score": {
+      "type": "number",
+      "description": "Score de intensidade (-1 suave a 1 brilhante)"
+    },
+    "contrast_score": {
+      "type": "number",
+      "description": "Score de contraste (-1 baixo a 1 alto)"
+    },
+    "questionnaire_data": {
+      "type": "object",
+      "description": "Dados do questionário complementar"
+    },
+    "primary_colors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cores primárias recomendadas (hex)"
+    },
+    "neutral_colors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cores neutras recomendadas (hex)"
+    },
+    "accent_colors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cores de acento recomendadas (hex)"
+    }
+  },
+  "required": []
+}

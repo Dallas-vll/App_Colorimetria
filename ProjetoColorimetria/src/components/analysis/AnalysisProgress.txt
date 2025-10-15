@@ -1,0 +1,43 @@
+import React from "react";
+import { Loader2, Sparkles } from "lucide-react";
+
+export default function AnalysisProgress({ isAnalyzing }) {
+  return (
+    <div className="text-center py-12">
+      <div className="relative inline-block mb-6">
+        <div className="w-24 h-24 bg-gradient-to-br from-rose-400 via-purple-400 to-blue-400 rounded-full flex items-center justify-center">
+          {isAnalyzing ? (
+            <Loader2 className="w-12 h-12 text-white animate-spin" />
+          ) : (
+            <Sparkles className="w-12 h-12 text-white" />
+          )}
+        </div>
+        {isAnalyzing && (
+          <div className="absolute inset-0 rounded-full animate-ping bg-purple-400 opacity-20" />
+        )}
+      </div>
+
+      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+        {isAnalyzing ? "Analisando sua colorimetria..." : "Processando"}
+      </h3>
+      <p className="text-gray-600">
+        {isAnalyzing
+          ? "Nossa IA está analisando seu tom de pele, profundidade e intensidade"
+          : "Aguarde enquanto processamos sua análise"}
+      </p>
+
+      {isAnalyzing && (
+        <div className="mt-8 space-y-3 max-w-md mx-auto">
+          {["Identificando subtom", "Calculando profundidade", "Determinando estação"].map(
+            (step, idx) => (
+              <div key={idx} className="flex items-center gap-3 text-sm text-gray-600">
+                <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                {step}
+              </div>
+            )
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

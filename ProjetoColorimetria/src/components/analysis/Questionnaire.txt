@@ -1,0 +1,90 @@
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
+const questions = [
+  {
+    id: "sunReaction",
+    question: "Quando você se expõe ao sol, sua pele:",
+    options: [
+      { value: "queima", label: "Queima facilmente e não bronzeia" },
+      { value: "queima_bronzeia", label: "Queima primeiro, depois bronzeia" },
+      { value: "bronzeia", label: "Bronzeia facilmente sem queimar" },
+    ],
+  },
+  {
+    id: "veinColor",
+    question: "A cor das veias no seu pulso é:",
+    options: [
+      { value: "azul", label: "Azul ou roxa (subtom frio)" },
+      { value: "verde", label: "Verde ou oliva (subtom quente)" },
+      { value: "ambos", label: "Difícil de dizer / Ambos (subtom neutro)" },
+    ],
+  },
+  {
+    id: "eyeColor",
+    question: "Cor natural dos seus olhos:",
+    options: [
+      { value: "azul_verde", label: "Azul, cinza ou verde" },
+      { value: "castanho_claro", label: "Castanho claro ou avelã" },
+      { value: "castanho_escuro", label: "Castanho escuro ou preto" },
+    ],
+  },
+  {
+    id: "hairColor",
+    question: "Cor natural do seu cabelo:",
+    options: [
+      { value: "loiro", label: "Loiro ou ruivo claro" },
+      { value: "castanho", label: "Castanho médio" },
+      { value: "escuro", label: "Castanho escuro ou preto" },
+    ],
+  },
+];
+
+export default function Questionnaire({ onComplete }) {
+  const [answers, setAnswers] = useState({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (Object.keys(answers).length === questions.length) {
+      onComplete(answers);
+    }
+  };
+
+  const isComplete = Object.keys(answers).length === questions.length;
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-8">
+      {questions.map((q) => (
+        <div key={q.id} className="space-y-4">
+          <Label className="text-lg font-semibold text-gray-900">{q.question}</Label>
+          <RadioGroup
+            value={answers[q.id]}
+            onValueChange={(value) => setAnswers({ ...answers, [q.id]: value })}
+          >
+            {q.options.map((option) => (
+              <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg hover:bg-purple-50 transition-colors">
+                <RadioGroupItem value={option.value} id={`${q.id}-${option.value}`} />
+                <Label
+                  htmlFor={`${q.id}-${option.value}`}
+                  className="flex-1 cursor-pointer text-gray-700"
+                >
+                  {option.label}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+      ))}
+
+      <Button
+        type="submit"
+        disabled={!isComplete}
+        className="w-full bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 disabled:opacity-50"
+      >
+        Iniciar Análise
+      </Button>
+    </form>
+  );
+}

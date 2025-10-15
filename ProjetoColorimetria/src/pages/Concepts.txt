@@ -1,0 +1,198 @@
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Palette, Sun, Droplet, Leaf, Snowflake } from "lucide-react";
+
+const seasonData = {
+  primavera: {
+    icon: Sun,
+    color: "from-yellow-400 to-pink-400",
+    description: "Tons quentes, claros e brilhantes. Primavera é caracterizada por cores vivas e energéticas.",
+    subseasons: [
+      {
+        name: "Primavera Clara",
+        characteristics: "Tons suaves e luminosos, baixo contraste",
+        colors: ["#FFE5CC", "#FFD1DC", "#FFFACD", "#E0F2F7"]
+      },
+      {
+        name: "Primavera Quente",
+        characteristics: "Tons dourados e calorosos, médio contraste",
+        colors: ["#FFA500", "#FF6347", "#FFD700", "#F08080"]
+      },
+      {
+        name: "Primavera Brilhante",
+        characteristics: "Cores vibrantes e saturadas, alto contraste",
+        colors: ["#FF1493", "#FF4500", "#FFFF00", "#00CED1"]
+      }
+    ]
+  },
+  verao: {
+    icon: Droplet,
+    color: "from-blue-300 to-purple-300",
+    description: "Tons frios, suaves e elegantes. Verão é marcado por cores delicadas e refinadas.",
+    subseasons: [
+      {
+        name: "Verão Claro",
+        characteristics: "Tons pastéis e etéreos, baixo contraste",
+        colors: ["#E6E6FA", "#B0E0E6", "#FFE4E1", "#F0E68C"]
+      },
+      {
+        name: "Verão Suave",
+        characteristics: "Tons acinzentados e neutros, médio-baixo contraste",
+        colors: ["#C0C0C0", "#B0C4DE", "#DDA0DD", "#D8BFD8"]
+      },
+      {
+        name: "Verão Frio",
+        characteristics: "Tons azulados intensos, médio-alto contraste",
+        colors: ["#4169E1", "#9370DB", "#FF69B4", "#00CED1"]
+      }
+    ]
+  },
+  outono: {
+    icon: Leaf,
+    color: "from-orange-400 to-red-600",
+    description: "Tons quentes, profundos e terrosos. Outono representa cores ricas e aconchegantes.",
+    subseasons: [
+      {
+        name: "Outono Suave",
+        characteristics: "Tons amadeirados e neutros, baixo-médio contraste",
+        colors: ["#D2B48C", "#BC8F8F", "#CD853F", "#8B7355"]
+      },
+      {
+        name: "Outono Quente",
+        characteristics: "Tons dourados e especiados, médio contraste",
+        colors: ["#FF8C00", "#D2691E", "#CD5C5C", "#B8860B"]
+      },
+      {
+        name: "Outono Profundo",
+        characteristics: "Tons escuros e intensos, alto contraste",
+        colors: ["#8B4513", "#A0522D", "#800000", "#2F4F4F"]
+      }
+    ]
+  },
+  inverno: {
+    icon: Snowflake,
+    color: "from-blue-600 to-indigo-800",
+    description: "Tons frios, profundos e dramáticos. Inverno é definido por cores ousadas e contrastantes.",
+    subseasons: [
+      {
+        name: "Inverno Brilhante",
+        characteristics: "Cores intensas e vibrantes, muito alto contraste",
+        colors: ["#FF1493", "#4169E1", "#FFFFFF", "#000000"]
+      },
+      {
+        name: "Inverno Frio",
+        characteristics: "Tons gélidos e puros, alto contraste",
+        colors: ["#191970", "#FF00FF", "#00FFFF", "#E6E6FA"]
+      },
+      {
+        name: "Inverno Profundo",
+        characteristics: "Tons escuros e dramáticos, muito alto contraste",
+        colors: ["#000080", "#8B008B", "#DC143C", "#F8F8FF"]
+      }
+    ]
+  }
+};
+
+export default function Concepts() {
+  return (
+    <div className="min-h-screen p-6 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Conceitos de Colorimetria
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Compreenda os fundamentos da colorimetria pessoal e as 12 estações expandidas
+          </p>
+        </div>
+
+        <Card className="mb-8 bg-white/90 backdrop-blur-sm shadow-xl border-2 border-white">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Palette className="w-6 h-6 text-purple-600" />
+              O que é Colorimetria Pessoal?
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-gray-700">
+            <p>
+              A colorimetria pessoal é uma técnica que analisa as características naturais de uma pessoa 
+              (tom de pele, olhos e cabelo) para identificar quais cores a favorecem mais, criando harmonia 
+              e realçando sua beleza natural.
+            </p>
+            <p>
+              O método das <strong>12 estações expandidas</strong> é uma evolução do sistema tradicional de 4 estações, 
+              oferecendo uma análise mais precisa e personalizada ao considerar três dimensões:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4">
+              <li><strong>Subtom (Temperatura):</strong> Quente, Frio ou Neutro</li>
+              <li><strong>Profundidade:</strong> Claro, Médio ou Escuro</li>
+              <li><strong>Intensidade:</strong> Suave, Médio ou Brilhante</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Tabs defaultValue="primavera" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsTrigger value="primavera" className="gap-2">
+              <Sun className="w-4 h-4" />
+              Primavera
+            </TabsTrigger>
+            <TabsTrigger value="verao" className="gap-2">
+              <Droplet className="w-4 h-4" />
+              Verão
+            </TabsTrigger>
+            <TabsTrigger value="outono" className="gap-2">
+              <Leaf className="w-4 h-4" />
+              Outono
+            </TabsTrigger>
+            <TabsTrigger value="inverno" className="gap-2">
+              <Snowflake className="w-4 h-4" />
+              Inverno
+            </TabsTrigger>
+          </TabsList>
+
+          {Object.entries(seasonData).map(([key, season]) => (
+            <TabsContent key={key} value={key}>
+              <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-2 border-white">
+                <CardHeader>
+                  <div className={`inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r ${season.color} rounded-lg text-white mb-4`}>
+                    <season.icon className="w-8 h-8" />
+                    <div>
+                      <h2 className="text-2xl font-bold capitalize">{key}</h2>
+                    </div>
+                  </div>
+                  <p className="text-gray-700 text-lg">{season.description}</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {season.subseasons.map((subseason, idx) => (
+                      <Card key={idx} className="bg-gradient-to-br from-white to-gray-50">
+                        <CardHeader>
+                          <CardTitle className="text-lg">{subseason.name}</CardTitle>
+                          <p className="text-sm text-gray-600">{subseason.characteristics}</p>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid grid-cols-4 gap-2">
+                            {subseason.colors.map((color, i) => (
+                              <div
+                                key={i}
+                                className="aspect-square rounded-lg shadow-md"
+                                style={{ backgroundColor: color }}
+                                title={color}
+                              />
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
+    </div>
+  );
+}

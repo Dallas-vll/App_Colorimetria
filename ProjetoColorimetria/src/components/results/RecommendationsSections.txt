@@ -1,0 +1,101 @@
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Shirt, Sparkles, Lightbulb } from "lucide-react";
+
+export default function RecommendationsSection({ analysis }) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-2 border-white">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shirt className="w-5 h-5 text-purple-600" />
+            Vestuário
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Peças Principais</h4>
+            <p className="text-sm text-gray-600">
+              Escolha blusas, vestidos e camisas nas suas cores primárias para criar looks que 
+              iluminam seu rosto e realçam suas características naturais.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Peças Básicas</h4>
+            <p className="text-sm text-gray-600">
+              Use suas cores neutras para calças, saias, blazers e casacos. Elas criam uma 
+              base versátil que combina perfeitamente com suas cores primárias.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Acessórios</h4>
+            <p className="text-sm text-gray-600">
+              Adicione interesse com acessórios nas suas cores de acento: lenços, bolsas, 
+              sapatos e joias que complementam seu visual.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-2 border-white">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-pink-600" />
+            Maquiagem
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Base e Corretivo</h4>
+            <p className="text-sm text-gray-600">
+              Escolha tons que combinem com seu subtom {analysis.skin_undertone}. 
+              Bases com subtom adequado criam um acabamento natural e harmonioso.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Batons e Blush</h4>
+            <p className="text-sm text-gray-600">
+              Use tons das suas cores primárias e de acento para batons e blush. 
+              Eles realçarão sua beleza natural sem criar desarmonia.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Sombras</h4>
+            <p className="text-sm text-gray-600">
+              Experimente sombras nas suas cores neutras para o dia a dia e cores de acento 
+              para looks mais ousados e festivos.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="md:col-span-2 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-100">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Lightbulb className="w-5 h-5 text-amber-600" />
+            Por Que Funciona?
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3 text-gray-700">
+          <p>
+            A colorimetria funciona porque as cores que você veste interagem com as cores naturais 
+            do seu rosto (pele, olhos, cabelo), criando reflexos que podem iluminar ou apagar sua aparência.
+          </p>
+          <p>
+            Quando você usa cores da sua paleta personalizada, elas:
+          </p>
+          <ul className="list-disc list-inside space-y-2 ml-4">
+            <li>Criam harmonia com seu subtom natural</li>
+            <li>Realçam o brilho natural da sua pele</li>
+            <li>Destacam a cor dos seus olhos</li>
+            <li>Equilibram o contraste natural do seu rosto</li>
+            <li>Fazem você parecer mais descansado e radiante</li>
+          </ul>
+          <p className="font-medium">
+            O resultado? Você se vê mais bonita, confiante e autêntica! ✨
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

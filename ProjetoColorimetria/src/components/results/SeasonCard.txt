@@ -1,0 +1,78 @@
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Sun, Droplet, Leaf, Snowflake } from "lucide-react";
+
+const seasonInfo = {
+  primavera_clara: { name: "Primavera Clara", icon: Sun, color: "from-yellow-300 to-pink-300", emoji: "🌸" },
+  primavera_quente: { name: "Primavera Quente", icon: Sun, color: "from-orange-400 to-yellow-400", emoji: "☀️" },
+  primavera_brilhante: { name: "Primavera Brilhante", icon: Sun, color: "from-pink-400 to-yellow-400", emoji: "✨" },
+  verao_claro: { name: "Verão Claro", icon: Droplet, color: "from-blue-200 to-purple-200", emoji: "💙" },
+  verao_suave: { name: "Verão Suave", icon: Droplet, color: "from-gray-300 to-blue-300", emoji: "🌊" },
+  verao_frio: { name: "Verão Frio", icon: Droplet, color: "from-blue-400 to-purple-400", emoji: "❄️" },
+  outono_suave: { name: "Outono Suave", icon: Leaf, color: "from-amber-300 to-orange-300", emoji: "🍂" },
+  outono_quente: { name: "Outono Quente", icon: Leaf, color: "from-orange-500 to-red-500", emoji: "🔥" },
+  outono_profundo: { name: "Outono Profundo", icon: Leaf, color: "from-red-700 to-amber-800", emoji: "🍁" },
+  inverno_brilhante: { name: "Inverno Brilhante", icon: Snowflake, color: "from-blue-500 to-pink-500", emoji: "💎" },
+  inverno_frio: { name: "Inverno Frio", icon: Snowflake, color: "from-indigo-500 to-blue-500", emoji: "🧊" },
+  inverno_profundo: { name: "Inverno Profundo", icon: Snowflake, color: "from-indigo-800 to-purple-800", emoji: "🌌" },
+};
+
+const undertoneLabels = {
+  quente: "Subtom Quente",
+  frio: "Subtom Frio",
+  neutro: "Subtom Neutro",
+};
+
+export default function SeasonCard({ analysis }) {
+  const info = seasonInfo[analysis.season] || seasonInfo.primavera_clara;
+  const Icon = info.icon;
+
+  return (
+    <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-2 border-white overflow-hidden">
+      <div className={`h-3 bg-gradient-to-r ${info.color}`} />
+      <CardHeader>
+        <CardTitle className="flex items-center gap-3">
+          <div className={`w-12 h-12 bg-gradient-to-br ${info.color} rounded-xl flex items-center justify-center shadow-lg`}>
+            <Icon className="w-7 h-7 text-white" />
+          </div>
+          <div>
+            <div className="text-2xl font-bold text-gray-900">
+              {info.name} {info.emoji}
+            </div>
+            <p className="text-sm text-gray-600 font-normal">Sua estação de colorimetria</p>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="relative rounded-xl overflow-hidden h-48">
+          <img
+            src={analysis.photo_url}
+            alt="Sua análise"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
+            <p className="text-sm text-gray-600 mb-1">Subtom</p>
+            <p className="font-bold text-gray-900">{undertoneLabels[analysis.skin_undertone]}</p>
+          </div>
+          <div className="p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg">
+            <p className="text-sm text-gray-600 mb-1">Profundidade</p>
+            <p className="font-bold text-gray-900 capitalize">{analysis.skin_depth}</p>
+          </div>
+          <div className="p-4 bg-gradient-to-br from-rose-50 to-orange-50 rounded-lg">
+            <p className="text-sm text-gray-600 mb-1">Intensidade</p>
+            <p className="font-bold text-gray-900 capitalize">{analysis.skin_intensity}</p>
+          </div>
+          <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg">
+            <p className="text-sm text-gray-600 mb-1">Categoria</p>
+            <p className="font-bold text-gray-900">{info.name.split(' ')[0]}</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

@@ -1,0 +1,163 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Sparkles, Palette, Eye, Shirt, ArrowRight } from "lucide-react";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-rose-100 via-purple-100 to-blue-100 opacity-50" />
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-32">
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg mb-4">
+              <Sparkles className="w-4 h-4 text-purple-600" />
+              <span className="text-sm font-medium text-gray-700">Projeto Acadêmico GTI</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+              Descubra Suas
+              <span className="block bg-gradient-to-r from-rose-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                Cores Perfeitas
+              </span>
+            </h1>
+            
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Inteligência artificial analisa seu tom de pele e recomenda paletas de cores 
+              personalizadas para realçar sua beleza natural
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+              <Link to={createPageUrl("Analysis")}>
+                <Button size="lg" className="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 text-lg px-8">
+                  Iniciar Análise
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link to={createPageUrl("Concepts")}>
+                <Button size="lg" variant="outline" className="border-2 border-purple-200 hover:bg-purple-50 text-lg px-8">
+                  Saber Mais
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+            Como Funciona
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="p-8 bg-white/80 backdrop-blur-sm border-2 border-white shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-14 h-14 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                <Eye className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                1. Análise Inteligente
+              </h3>
+              <p className="text-gray-600">
+                Tire uma foto ou faça upload de uma imagem da sua pele. Nossa IA analisa subtom, 
+                profundidade e intensidade para identificar sua estação de colorimetria.
+              </p>
+            </Card>
+
+            <Card className="p-8 bg-white/80 backdrop-blur-sm border-2 border-white shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                <Palette className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                2. Paleta Personalizada
+              </h3>
+              <p className="text-gray-600">
+                Receba uma paleta completa de cores que harmonizam perfeitamente com seu tom de pele, 
+                baseada no método das 12 estações de colorimetria.
+              </p>
+            </Card>
+
+            <Card className="p-8 bg-white/80 backdrop-blur-sm border-2 border-white shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                <Shirt className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                3. Recomendações Práticas
+              </h3>
+              <p className="text-gray-600">
+                Veja exemplos práticos de aplicação das cores em vestuário e maquiagem, 
+                com explicações sobre os princípios da colorimetria.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Seasons Preview */}
+      <section className="py-20 px-6 bg-white/50 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            12 Estações de Colorimetria
+          </h2>
+          <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+            Nossa análise classifica você em uma das 12 estações expandidas, 
+            cada uma com características únicas e paletas específicas
+          </p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {[
+              { name: "Primavera", colors: ["#FFD700", "#FF6B6B", "#98D8C8"] },
+              { name: "Verão", colors: ["#B8C5D6", "#E8B4D4", "#A8D5E2"] },
+              { name: "Outono", colors: ["#D4691E", "#8B4513", "#CD853F"] },
+              { name: "Inverno", colors: ["#000080", "#FF1493", "#FFFFFF"] },
+            ].map((season, idx) => (
+              <Card key={idx} className="p-6 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+                <h4 className="font-bold text-gray-900 mb-3">{season.name}</h4>
+                <div className="flex gap-2 justify-center">
+                  {season.colors.map((color, i) => (
+                    <div
+                      key={i}
+                      className="w-12 h-12 rounded-full shadow-lg"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <Link to={createPageUrl("Concepts")}>
+            <Button variant="outline" size="lg" className="border-2 border-purple-200 hover:bg-purple-50">
+              Conhecer Todas as Estações
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <Card className="p-12 bg-gradient-to-br from-rose-500 via-purple-500 to-blue-500 text-white shadow-2xl">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Pronto para Descobrir suas Cores?
+            </h2>
+            <p className="text-xl mb-8 text-white/90">
+              Faça sua análise agora e receba recomendações personalizadas em minutos
+            </p>
+            <Link to={createPageUrl("Analysis")}>
+              <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 shadow-xl text-lg px-8">
+                Começar Agora
+                <Sparkles className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </Card>
+        </div>
+      </section>
+    </div>
+  );
+}

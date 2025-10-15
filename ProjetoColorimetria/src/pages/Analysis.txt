@@ -1,0 +1,173 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { UserAnalysis } from "@/entities/UserAnalysis";
+import { UploadFile, InvokeLLM } from "@/integrations/Core";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertCircle, ArrowLeft } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+import PhotoUpload from "../components/analysis/PhotoUpload";
+import Questionnaire from "../components/analysis/Questionnaire";
+import AnalysisProgress from "../components/analysis/AnalysisProgress";
+
+export default function Analysis() {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
+  const [questionnaireData, setQuestionnaireData] = useState({});
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handlePhotoUpload = async (file) => {
+    setError(null);
+    setPhotoFile(file);
+    try {
+      const { file_url } = await UploadFile({ file });
+      setPhotoUrl(file_url);
+      setStep(2);
+    } catch (err) {
+      setError("Erro ao fazer upload da foto. Tente novamente.");
+    }
+  };
+
+  const handleQuestionnaireComplete = (data) => {
+    setQuestionnaireData(data);
+    setStep(3);
+    performAnalysis(data);
+  };
+
+  const performAnalysis = async (questionnaire) => {
+    setIsAnalyzing(true);
+    setError(null);
+
+    try {
+      const prompt = `Você é um especialista em colorimetria pessoal. Analise esta imagem da pele da pessoa e, combinado com as respostas do questionário, determine:
+
+1. Subtom da pele (quente, frio ou neutro)
+2. Profundidade da pele (claro, medio ou escuro)
+3. Intensidade da pele (suave, medio ou brilhante)
+4. A estação de colorimetria (uma das 12 estações expandidas)
+5. Scores para visualização (-1 a 1):
+   - temperature_score: -1 para muito frio, 1 para muito quente
+   - depth_score: -1 para muito claro, 1 para muito escuro
+   - intensity_score: -1 para muito suave, 1 para muito brilhante
+   - contrast_score: -1 para baixo contraste, 1 para alto contraste
+
+6. Paletas de cores (em formato HEX):
+   - 8 cores primárias que mais favorecem
+   - 6 cores neutras para compor looks
+   - 6 cores de acento para destacar
+
+Questionário do usuário:
+- Bronzeia ou queima: ${questionnaire.sunReaction}
+- Cor das veias: ${questionnaire.veinColor}
+- Cor dos olhos: ${questionnaire.eyeColor}
+- Cor natural do cabelo: ${questionnaire.hairColor}
+
+Retorne uma resposta detalhada e precisa.`;
+
+      const result = await InvokeLLM({
+        prompt,
+        file_urls: [photoUrl],
+        response_json_schema: {
+          type: "object",
+          properties: {
+            skin_undertone: {
+              type: "string",
+              enum: ["quente", "frio", "neutro"]
+            },
+            skin_depth: {
+              type: "string",
+              enum: ["claro", "medio", "escuro"]
+            },
+            skin_intensity: {
+              type: "string",
+              enum: ["suave", "medio", "brilhante"]
+            },
+            season: {
+              type: "string",
+              enum: [
+                "primavera_clara", "primavera_quente", "primavera_brilhante",
+                "verao_claro", "verao_suave", "verao_frio",
+                "outono_suave", "outono_quente", "outono_profundo",
+                "inverno_brilhante", "inverno_frio", "inverno_profundo"
+              ]
+            },
+            temperature_score: { type: "number" },
+            depth_score: { type: "number" },
+            intensity_score: { type: "number" },
+            contrast_score: { type: "number" },
+            primary_colors: {
+              type: "array",
+              items: { type: "string" }
+            },
+            neutral_colors: {
+              type: "array",
+              items: { type: "string" }
+            },
+            accent_colors: {
+              type: "array",
+              items: { type: "string" }
+            }
+          }
+        }
+      });
+
+      const analysis = await UserAnalysis.create({
+        photo_url: photoUrl,
+        questionnaire_data: questionnaire,
+        ...result
+      });
+
+      navigate(createPageUrl(`Results?id=${analysis.id}`));
+    } catch (err) {
+      setError("Erro ao processar análise. Tente novamente.");
+      setIsAnalyzing(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => step > 1 && !isAnalyzing ? setStep(step - 1) : navigate(createPageUrl("Home"))}
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Análise de Colorimetria</h1>
+            <p className="text-gray-600 mt-1">Etapa {step} de 3</p>
+          </div>
+        </div>
+
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        <Card className="shadow-xl border-2 border-white bg-white/90 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle>
+              {step === 1 && "1. Envie uma Foto da sua Pele"}
+              {step === 2 && "2. Complete o Questionário"}
+              {step === 3 && "3. Processando Análise"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {step === 1 && <PhotoUpload onUpload={handlePhotoUpload} />}
+            {step === 2 && <Questionnaire onComplete={handleQuestionnaireComplete} />}
+            {step === 3 && <AnalysisProgress isAnalyzing={isAnalyzing} />}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

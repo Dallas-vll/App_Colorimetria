@@ -1,0 +1,103 @@
+import React, { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Upload, Camera, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+export default function PhotoUpload({ onUpload }) {
+  const fileInputRef = useRef(null);
+  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        setError("Arquivo muito grande. Máximo 10MB.");
+        return;
+      }
+      
+      if (!file.type.startsWith("image/")) {
+        setError("Por favor, selecione uma imagem.");
+        return;
+      }
+
+      setError(null);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+      onUpload(file);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Alert className="bg-blue-50 border-blue-200">
+        <Camera className="h-4 w-4 text-blue-600" />
+        <AlertDescription className="text-blue-900">
+          <strong>Dicas para melhor análise:</strong>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Use luz natural (próximo a uma janela)</li>
+            <li>Remova maquiagem se possível</li>
+            <li>Fotografe o pulso, pescoço ou rosto sem sombras</li>
+            <li>Certifique-se que a imagem está nítida</li>
+          </ul>
+        </AlertDescription>
+      </Alert>
+
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
+
+      {preview ? (
+        <Card className="p-6">
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-full h-64 object-cover rounded-lg mb-4"
+          />
+          <Button
+            variant="outline"
+            onClick={() => fileInputRef.current?.click()}
+            className="w-full"
+          >
+            Escolher Outra Foto
+          </Button>
+        </Card>
+      ) : (
+        <Card
+          className="border-2 border-dashed border-gray-300 hover:border-purple-400 transition-colors cursor-pointer"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Upload className="w-8 h-8 text-purple-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Enviar Foto da Pele
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Clique para selecionar ou arraste uma imagem
+            </p>
+            <Button type="button" className="bg-gradient-to-r from-rose-600 to-purple-600">
+              Selecionar Foto
+            </Button>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}
